@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 import discord
 from discord.ext import commands
@@ -8,6 +9,9 @@ from datetime import date
 from discord import ActivityType
 from datetime import datetime
 from random import *
+from dotenv import load_dotenv
+
+load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -182,6 +186,5 @@ async def ticket(ctx,*, frage):
         await ctx.message.delete()
         await ctx.author.send("**Es ist bereits ein Ticket von dir geöffnet!**")
 
-token = open("api.key", "r")
-client.run(token.read())
+client.run(os.getenv("DISCORD_TOKEN"))
 
