@@ -2,7 +2,7 @@ name: ci
 on:
   push:
     branches:
-      - "main"
+      - "master"
   workflow_dispatch:
     inputs:
       logLevel:
@@ -32,7 +32,7 @@ jobs:
       - name: 'Create env file'
         run: |
           touch .env
-          echo DISCORD_TOKEN=${{ secrets.ENV_DISCORD_TOKEN }} >> .env
+          echo DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} >> .env
           cat .env
       - name: Prepare
         id: prep
@@ -62,7 +62,7 @@ jobs:
         with:
           registry: ghcr.io
           username: gamius00
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          password: ${{ secrets.TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Build and push
