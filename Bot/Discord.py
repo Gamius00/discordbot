@@ -182,5 +182,6 @@ async def ticket(ctx,*, frage):
         await ctx.message.delete()
         await ctx.author.send("**Es ist bereits ein Ticket von dir geöffnet!**")
 
-client.run('MTA2OTU5NzAxNTg5OTY0Mzk0NA.GvkKjx.4bM7sx0GGw_7_uXFmBrYkG1Hba_sVFtMY6WRAA')
+token = open("api.key", "r")
+client.run(token.read())
 
