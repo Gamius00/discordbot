@@ -4,13 +4,12 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 import datetime
-import youtube_dl
 from datetime import date
 from discord import ActivityType
 from datetime import datetime
 from random import *
 from dotenv import load_dotenv
-from discord import FFmpegPCMAudio
+
 
 load_dotenv()
 
