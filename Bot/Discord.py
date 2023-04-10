@@ -10,7 +10,6 @@ from datetime import datetime
 from random import *
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 intents = discord.Intents.default()
@@ -28,6 +27,7 @@ list = ["✅", "💻", "🔒", "🔐"]
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
     print("Gamius (1069597015899643944) ist jetzt startklar.")
+    synced = await client.tree.sync()
 
 @client.event
 async def on_message(message):
@@ -35,6 +35,9 @@ async def on_message(message):
         async def test():
 
             if client.user == message.author:
+                return
+
+            elif message.author.bot:
                 return
 
             else:
@@ -198,7 +201,7 @@ async def ticket(ctx,*, frage):
 
                 else:
                     await message.remove_reaction("🖱️", user)
-                    await user.send("**You can´t close the Ticket. Only moderators can do that.**")
+                    await user.send("**You can´t claim the Ticket. Only moderators can do that.**")
 
     if ctx.author.id not in names:
         await code()
@@ -220,6 +223,19 @@ async def ticket(ctx,*, frage):
 @client.command()
 async def reset(message):
     names.clear()
+
+@client.tree.command(name="help", description="This ist the Help command!")
+async def help(interaction: discord.Interaction):
+    embedVar = discord.Embed(title="Help Command",
+                             description="")
+    embedVar.add_field(name=".report {user} proof(link) reason", value="",
+                       inline=False)
+    embedVar.add_field(name=".ticket {question}", value="", inline=False)
+    embedVar.add_field(name=".changenick {member} {new nick}", value="", inline=False)
+    time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+    embedVar.set_footer(text="© Gamius",
+                        icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
+    await interaction.response.send_message(embed=embedVar)
 
 client.run(os.getenv("DISCORD_TOKEN"))
 
