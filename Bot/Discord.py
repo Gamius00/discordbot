@@ -1,15 +1,16 @@
 import asyncio
 import os
-
 import discord
 from discord.ext import commands
 from discord.utils import get
 import datetime
+import youtube_dl
 from datetime import date
 from discord import ActivityType
 from datetime import datetime
 from random import *
 from dotenv import load_dotenv
+from discord import FFmpegPCMAudio
 
 load_dotenv()
 
@@ -63,12 +64,24 @@ async def on_message(message):
                                             icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
                         await channel.send(embed=embedVar)
 
+        if message.content == "?help":
+            embedVar = discord.Embed(title="Help Command",
+                                     description="")
+            embedVar.add_field(name=".report {user} proof(link) reason", value="",
+                               inline=False)
+            embedVar.add_field(name=".ticket {question}", value="", inline=False)
+            embedVar.add_field(name=".changenick {member} {new nick}", value="", inline=False)
+            time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+            embedVar.set_footer(text="© Gamius",
+                                icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
+            await message.channel.send(embed=embedVar)
+
         await test()
 
 @client.command()
-async def changenick(ctx, member: discord.Member, nick):
-    await member.edit(nick=nick)
-    await ctx.send(f'Nickname was changed to {member.mention}')
+async def changenick(ctx, nick):
+    await ctx.author.edit(nick=nick)
+    await ctx.send(f'Nickname was changed to {ctx.author}')
 
 @client.command()
 async def report(ctx, member: discord.Member, Nachweis, * ,discription):
@@ -173,7 +186,7 @@ async def ticket(ctx,*, frage):
             elif reaction.emoji == "🖱️" and user != client.user and reaction.message.id == message.id:
                 if user.id in moderatoren:
                     await message.clear_reaction("🖱️")
-                    embed2 = discord.Embed(title="Ticket by " + str(user) + " (" + str(user.id) + ") ",
+                    embed2 = discord.Embed(title="Ticket by " + str(ctx.author) + " (" + str(ctx.author.id) + ") ",
                                            description="Reason: " + str(frage))
                     embed2.add_field(name="**The Ticket was claimed by " + str(user) + "**", value="", inline=False)
                     embed2.add_field(name="Claimstatus ✅", value="", inline=False)
@@ -181,7 +194,7 @@ async def ticket(ctx,*, frage):
                     embed2.set_footer(text="© Gamius",
                                       icon_url="https://cdn.discordapp.com/attachments/1072590655202791525/1072590882110455860/Profilbild_Discord.png")
                     await message.edit(embed=embed2)
-                    await channel.edit(name="claim " + str(ctx.author.id))
+                    await channel.edit(name="claim " + str(user.name))
                     close = True
 
                 else:
@@ -208,6 +221,61 @@ async def ticket(ctx,*, frage):
 @client.command()
 async def reset(message):
     names.clear()
+
+@client.command()
+async def join(ctx):
+    # check if the user is in a voice channel
+    if ctx.author.voice:
+        channel = ctx.author.voice.channel
+        # join the channel
+        await channel.connect()
+        await ctx.send(f'Joined {channel}')
+    else:
+        await ctx.send("You are not in a voice channel")
+
+
+@client.command()
+async def play(ctx, url):
+    # check if the user is in a voice channel
+    if not ctx.author.voice:
+        return await ctx.send("You are not in a voice channel.")
+
+    # get the voice channel
+    vc = ctx.author.voice.channel
+
+    # check if the bot is already connected to a voice channel
+    if not ctx.voice_client:
+        await vc.connect()
+    else:
+        if ctx.voice_client.channel != vc:
+            return await ctx.send("I'm already in a voice channel.")
+
+    # download the audio from YouTube
+    ytdl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': 'song.%(ext)s',
+        'quiet': True,
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192'
+        }]
+    }
+    with youtube_dl.YoutubeDL(ytdl_opts) as ytdl:
+        try:
+            info = ytdl.extract_info(url, download=True)
+            filename = ytdl.prepare_filename(info)
+        except Exception as e:
+            return await ctx.send(f"Error: {e}")
+
+    # create the audio source
+    source = discord.FFmpegPCMAudio(filename)
+
+    # play the audio
+    ctx.voice_client.play(source)
+
+    # send a message to the user
+    await ctx.send(f"Now playing: {info['title']}")
 
 client.run(os.getenv("DISCORD_TOKEN"))
 
