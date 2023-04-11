@@ -129,24 +129,13 @@ async def report(ctx, member: discord.Member, Nachweis, * ,discription):
         await ctx.message.delete()
         await ctx.author.send("Please provide a link to the message. If this message no longer exists, please enter the channel in which the event happened!")
 
-@client.command()
-async def ticket(ctx):
-    if ctx.author.id == 726409024894926869:
-        embedVar3 = discord.Embed(title="Ticket",
-                                  description="If you have a question you can react with ✉️ to open a Ticket.",
-                                  color=990001)
-        embedVar3.set_footer(text="© Creativo",
-                            icon_url="")
-        message = await ctx.send(embed=embedVar3)
-        await message.add_reaction("✉️")
-
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
     member = payload.member
 
     if payload.emoji.name == "✉️":
-        if message_id == 1095428901926354995:
+        if message_id == 1095439527516065843:
             member = member
             Mod = get(member.guild.roles, name="🛡️ | Moderator")
             guild = member.guild
