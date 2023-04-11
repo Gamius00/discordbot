@@ -129,96 +129,108 @@ async def report(ctx, member: discord.Member, Nachweis, * ,discription):
         await ctx.message.delete()
         await ctx.author.send("Please provide a link to the message. If this message no longer exists, please enter the channel in which the event happened!")
 
-
 @client.command()
-async def ticket(ctx,*, frage):
+async def ticket(ctx):
+    if ctx.author.id == 726409024894926869:
+        embedVar3 = discord.Embed(title="Ticket",
+                                  description="If you have a question you can react with ✉️ to open a Ticket.",
+                                  color=990001)
+        embedVar3.set_footer(text="© Creativo",
+                            icon_url="")
+        message = await ctx.send(embed=embedVar3)
+        await message.add_reaction("✉️")
 
+@client.event
+async def on_raw_reaction_add(payload):
+    message_id = payload.message_id
+    member = payload.member
 
-    member = ctx.message.author
-    Mod = get(member.guild.roles, name="🛡️ | Moderator")
-    guild = ctx.message.guild
+    if payload.emoji.name == "✉️":
+        if message_id == 1095428901926354995:
+            member = member
+            Mod = get(member.guild.roles, name="🛡️ | Moderator")
+            guild = member.guild
 
-    overwrites = {
-        guild.default_role: discord.PermissionOverwrite(view_channel=False),
-        ctx.author: discord.PermissionOverwrite(view_channel=True),
-        Mod: discord.PermissionOverwrite(view_channel=True)
-    }
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                member: discord.PermissionOverwrite(view_channel=True),
+                Mod: discord.PermissionOverwrite(view_channel=True)
+            }
 
-    async def code():
-        names.append(ctx.author.id)
-        await ctx.message.delete()
-        print("[Gelöscht] " + "(" + str(client.user.id) + ") " + str(ctx.message.content))
-        guild = ctx.message.guild
-        channel = await guild.create_text_channel('ticket-' + str(ctx.author.id), overwrites=overwrites)
-        client.get_channel(channel)
-        embed = discord.Embed(title="Ticket by " + str(ctx.author) + " (" + str(ctx.author.id) + ") ",
-                              description="Reason: " + str(frage))
-        embed.add_field(name="A team member will contact you as soon as possible!" + "", value="", inline=False)
-        embed.add_field(name="Claimstatus ❌", value="", inline=False)
-        embed.add_field(name="🔒 Close", value="", inline=False)
-        embed.add_field(name="🖱️ Claim", value="", inline=False)
-        embed.set_footer(text="© Gamius",
-                         icon_url="https://cdn.discordapp.com/attachments/1072590655202791525/1072590882110455860/Profilbild_Discord.png")
-        message = await channel.send(embed=embed)
-        await message.add_reaction("🔒")
-        await message.add_reaction("🖱️")
-        close = False
+            async def code():
+                names.append(member.id)
+                guild = member.guild
+                channel = await guild.create_text_channel('ticket-' + str(member.id), overwrites=overwrites)
+                client.get_channel(channel)
+                embed = discord.Embed(title="Ticket by " + str(member) + " (" + str(member.id) + ") ", description="")
+                embed.add_field(name="A team member will contact you as soon as possible!" + "", value="", inline=False)
+                embed.add_field(name="Claimstatus ❌", value="", inline=False)
+                embed.add_field(name="🔒 Close", value="", inline=False)
+                embed.add_field(name="🖱️ Claim", value="", inline=False)
+                embed.set_footer(text="© Gamius",
+                                 icon_url="https://cdn.discordapp.com/attachments/1072590655202791525/1072590882110455860/Profilbild_Discord.png")
+                message = await channel.send(embed=embed)
+                await message.add_reaction("🔒")
+                await message.add_reaction("🖱️")
+                close = False
 
-        while True:
+                while True:
 
-            reaction, user = await client.wait_for("reaction_add")
+                    reaction, user = await client.wait_for("reaction_add")
 
-            if reaction.emoji == "🔒" and user != client.user and reaction.message.id == message.id:
-                if close == True:
-                    await channel.delete()
-                    print("The Ticket of: " + str(client.user.id) + " was closed.")
-                    names.remove(ctx.author.id)
+                    if reaction.emoji == "🔒" and user != client.user and reaction.message.id == message.id:
+                        if close == True:
+                            await channel.delete()
+                            print("The Ticket of: " + str(client.user.id) + " was closed.")
+                            names.remove(member.id)
 
-                elif close == False and user.id not in moderatoren:
-                    await message.remove_reaction("🔒", user)
-                    await user.send(
-                        "**Please wait until this ticket has been claimed or a moderator closes this ticket. \nYou can't close the ticket because we don't want one person to open too many tickets!**")
+                        elif close == False and user.id not in moderatoren:
+                            await message.remove_reaction("🔒", user)
+                            await user.send(
+                                "**Please wait until this ticket has been claimed or a moderator closes this ticket. \nYou can't close the ticket because we don't want one person to open too many tickets!**")
 
-                elif close == False and user.id in moderatoren:
-                    close = True
-                    await channel.delete()
-                    print("The Ticket of: " + str(client.user.id) + " wurde geschlossen.")
-                    names.remove(ctx.author.id)
+                        elif close == False and user.id in moderatoren:
+                            close = True
+                            await channel.delete()
+                            print("The Ticket of: " + str(client.user.id) + " wurde geschlossen.")
+                            names.remove(member.id)
 
-            elif reaction.emoji == "🖱️" and user != client.user and reaction.message.id == message.id:
-                if user.id in moderatoren:
-                    await message.clear_reaction("🖱️")
-                    embed2 = discord.Embed(title="Ticket by " + str(ctx.author) + " (" + str(ctx.author.id) + ") ",
-                                           description="Reason: " + str(frage))
-                    embed2.add_field(name="**The Ticket was claimed by " + str(user) + "**", value="", inline=False)
-                    embed2.add_field(name="Claimstatus ✅", value="", inline=False)
-                    embed2.add_field(name="🔒 Close", value="", inline=False)
-                    embed2.set_footer(text="© Gamius",
-                                      icon_url="https://cdn.discordapp.com/attachments/1072590655202791525/1072590882110455860/Profilbild_Discord.png")
-                    await message.edit(embed=embed2)
-                    await channel.edit(name="claim " + str(user.name))
-                    close = True
+                    elif reaction.emoji == "🖱️" and user != client.user and reaction.message.id == message.id:
+                        if user.id in moderatoren:
+                            await message.clear_reaction("🖱️")
+                            embed2 = discord.Embed(
+                                title="Ticket by " + str(member) + " (" + str(member.id) + ") ",
+                                description="")
+                            embed2.add_field(name="**The Ticket was claimed by " + str(user) + "**", value="",
+                                             inline=False)
+                            embed2.add_field(name="Claimstatus ✅", value="", inline=False)
+                            embed2.add_field(name="🔒 Close", value="", inline=False)
+                            embed2.set_footer(text="© Gamius",
+                                              icon_url="https://cdn.discordapp.com/attachments/1072590655202791525/1072590882110455860/Profilbild_Discord.png")
+                            await message.edit(embed=embed2)
+                            await channel.edit(name="claim " + str(user.name))
+                            close = True
 
-                else:
-                    await message.remove_reaction("🖱️", user)
-                    await user.send("**You can´t claim the Ticket. Only moderators can do that.**")
+                        else:
+                            await message.remove_reaction("🖱️", user)
+                            await user.send("**You can´t claim the Ticket. Only moderators can do that.**")
 
-    if ctx.author.id not in names:
-        await code()
-
-    else:
-
-        for channel in ctx.guild.channels:
-            if channel.name == "ticket-" + str(ctx.author.id):
-                await ctx.message.delete()
-                await ctx.author.send("**There is already a ticket open from you!**")
-                return
-
-        for channel in ctx.guild.channels:
-            if channel.name != "ticket-" + str(ctx.author.id):
-                print("test")
+            if member.id not in names:
                 await code()
-                return
+
+            else:
+
+                for channel in member.guild.channels:
+                    if channel.name == "ticket-" + str(member.id):
+                        await member.send("**There is already a ticket open from you!**")
+                        return
+
+                for channel in member.guild.channels:
+                    if channel.name != "ticket-" + str(member.id):
+                        print("test")
+                        await code()
+                        return
+
 
 @client.command()
 async def reset(message):
