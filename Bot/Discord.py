@@ -80,10 +80,40 @@ async def on_message(message):
 
         await test()
 
-@client.command()
-async def changenick(ctx, nick):
-    await ctx.author.edit(nick=nick)
-    await ctx.send(f'Nickname was changed to {ctx.author}')
+@client.tree.command(name="changenick", description="With this command you can change your nick at this Server!")
+async def changenick(interaction: discord.Interaction, nick: str, member: discord.Member=None):
+    async def test():
+        if interaction.user == member:
+            await member.edit(nick=nick)
+            await interaction.response.send_message(f'Nickname from user {member} was changed to {member.mention}')
+
+        elif interaction.user != member and interaction.user.id in moderatoren:
+            await member.edit(nick=nick)
+            await interaction.response.send_message(f'Nickname from user {member} was changed to {member.mention}')
+
+        else:
+            await interaction.response.send_message(
+                "Du hast leider nicht die nötigen Rechte um den Nickname von " + str(member) + " zu ändern!")
+
+    if member == None:
+        member = interaction.user
+        await member.edit(nick=nick)
+        await interaction.response.send_message(f'Nickname from user {member} was changed to {member.mention}')
+
+    elif nick == "reset":
+        if interaction.user == member:
+            await member.edit(nick=None)
+            await interaction.response.send_message(f'Nickname from user {member} was reseted')
+
+        elif interaction.user != member and interaction.user.id in moderatoren:
+            await member.edit(nick=None)
+            await interaction.response.send_message(f'Nickname from user {member} was reseted')
+
+        else:
+            await interaction.response.send_message(
+                "Du hast leider nicht die nötigen Rechte um den Nickname von " + str(member) + " zu ändern!")
+    else:
+        await test()
 
 @client.command()
 async def report(ctx, member: discord.Member, Nachweis, * ,discription):
@@ -134,7 +164,7 @@ async def on_raw_reaction_add(payload):
     message_id = payload.message_id
     member = payload.member
 
-    if payload.emoji.name == "✉️":
+    if payload.emoji.name == "️":
         if message_id == 1095439527516065843:
             member = member
             Mod = get(member.guild.roles, name="🛡️ | Moderator")
@@ -151,6 +181,7 @@ async def on_raw_reaction_add(payload):
                 guild = member.guild
                 channel = await guild.create_text_channel('ticket-' + str(member.id), overwrites=overwrites)
                 client.get_channel(channel)
+                await channel.send("<@" + member.id + ">")
                 embed = discord.Embed(title="Ticket by " + str(member) + " (" + str(member.id) + ") ", description="")
                 embed.add_field(name="A team member will contact you as soon as possible!" + "", value="", inline=False)
                 embed.add_field(name="Claimstatus ❌", value="", inline=False)
@@ -159,6 +190,7 @@ async def on_raw_reaction_add(payload):
                 embed.set_footer(text="© Gamius",
                                  icon_url="https://cdn.discordapp.com/attachments/1072590655202791525/1072590882110455860/Profilbild_Discord.png")
                 message = await channel.send(embed=embed)
+
                 await message.add_reaction("🔒")
                 await message.add_reaction("🖱️")
                 close = False
@@ -175,8 +207,7 @@ async def on_raw_reaction_add(payload):
 
                         elif close == False and user.id not in moderatoren:
                             await message.remove_reaction("🔒", user)
-                            await user.send(
-                                "**Please wait until this ticket has been claimed or a moderator closes this ticket. \nYou can't close the ticket because we don't want one person to open too many tickets!**")
+                            await user.send("**Please wait until this ticket has been claimed or a moderator closes this ticket. \nYou can't close the ticket because we don't want one person to open too many tickets!**")
 
                         elif close == False and user.id in moderatoren:
                             close = True
