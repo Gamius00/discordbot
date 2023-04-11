@@ -235,7 +235,23 @@ async def help(interaction: discord.Interaction):
     time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
     embedVar.set_footer(text="© Gamius",
                         icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
-    await interaction.response.send_message(embed=embedVar)
+    await interaction.response.send_message(embed=embedVar, ephemeral=True)
+
+@client.tree.command(name="userinfo", description="Sends informations on a user")
+async def unserinfo(interaction: discord.Interaction, member: discord.Member=None):
+    if member == None:
+        member = interaction.user
+
+    roles = [role for role in member.roles]
+    embed = discord.Embed(title="User Info", description=f"Here is the info on the user {member.mention}", color = discord.Color.green())
+    embed.set_thumbnail(url=member.avatar)
+    embed.add_field(name="ID", value= member.id)
+    embed.add_field(name="Name", value=f"{member.name}#{member.discriminator}")
+    embed.add_field(name="Nickname", value= member.display_name)
+    embed.add_field(name="Created at", value=member.created_at.strftime("%a, %B %#d, %Y, %I:%M %p"))
+    embed.add_field(name="Joined At", value= member.joined_at.strftime("%a, %B %#d, %Y, %I:%M %p"))
+    embed.add_field(name="Top Role", value=member.top_role.mention)
+    await interaction.response.send_message(embed=embed, ephemeral=True)
 
 client.run(os.getenv("DISCORD_TOKEN"))
 
