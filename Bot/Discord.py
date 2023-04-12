@@ -76,7 +76,7 @@ async def on_message(message):
             time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
             embedVar.set_footer(text="© Gamius",
                                 icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
-            await message.channel.send(embed=embedVar)
+            await message.channel.send(embed=embedVar, ephemeral=True)
 
         await test()
 
@@ -85,33 +85,31 @@ async def changenick(interaction: discord.Interaction, nick: str, member: discor
     async def test():
         if interaction.user == member:
             await member.edit(nick=nick)
-            await interaction.response.send_message(f'Nickname from user {member} was changed to {member.mention}')
+            await interaction.response.send_message(content=f'Nickname from user {member} was changed to {member.mention}', ephemeral=True)
 
         elif interaction.user != member and interaction.user.id in moderatoren:
             await member.edit(nick=nick)
-            await interaction.response.send_message(f'Nickname from user {member} was changed to {member.mention}')
+            await interaction.response.send_message(content=f'Nickname from user {member} was changed to {member.mention}', ephemeral=True)
 
         else:
-            await interaction.response.send_message(
-                "Du hast leider nicht die nötigen Rechte um den Nickname von " + str(member) + " zu ändern!")
+            await interaction.response.send_message(content="Du hast leider nicht die nötigen Rechte um den Nickname von " + str(member) + " zu ändern!", ephemeral=True)
 
     if member == None:
         member = interaction.user
         await member.edit(nick=nick)
-        await interaction.response.send_message(f'Nickname from user {member} was changed to {member.mention}')
+        await interaction.response.send_message(content=f'Nickname from user {member} was changed to {member.mention}', ephemeral=True)
 
     elif nick == "reset":
         if interaction.user == member:
             await member.edit(nick=None)
-            await interaction.response.send_message(f'Nickname from user {member} was reseted')
+            await interaction.response.send_message(content=f'Nickname from user {member} was reseted', ephemeral=True)
 
         elif interaction.user != member and interaction.user.id in moderatoren:
             await member.edit(nick=None)
-            await interaction.response.send_message(f'Nickname from user {member} was reseted')
+            await interaction.response.send_message(content=f'Nickname from user {member} was reseted', ephemeral=True)
 
         else:
-            await interaction.response.send_message(
-                "Du hast leider nicht die nötigen Rechte um den Nickname von " + str(member) + " zu ändern!")
+            await interaction.response.send_message(content="Du hast leider nicht die nötigen Rechte um den Nickname von " + str(member) + " zu ändern!", ephemeral=True)
     else:
         await test()
 
@@ -164,7 +162,7 @@ async def on_raw_reaction_add(payload):
     message_id = payload.message_id
     member = payload.member
 
-    if payload.emoji.name == "️":
+    if payload.emoji.name == "✉️":
         if message_id == 1095439527516065843:
             member = member
             Mod = get(member.guild.roles, name="🛡️ | Moderator")
@@ -181,7 +179,8 @@ async def on_raw_reaction_add(payload):
                 guild = member.guild
                 channel = await guild.create_text_channel('ticket-' + str(member.id), overwrites=overwrites)
                 client.get_channel(channel)
-                await channel.send("<@" + member.id + ">")
+                message = await channel.send("<@" + str(member.id) + ">")
+                await message.delete()
                 embed = discord.Embed(title="Ticket by " + str(member) + " (" + str(member.id) + ") ", description="")
                 embed.add_field(name="A team member will contact you as soon as possible!" + "", value="", inline=False)
                 embed.add_field(name="Claimstatus ❌", value="", inline=False)
@@ -247,7 +246,6 @@ async def on_raw_reaction_add(payload):
 
                 for channel in member.guild.channels:
                     if channel.name != "ticket-" + str(member.id):
-                        print("test")
                         await code()
                         return
 
@@ -284,6 +282,82 @@ async def unserinfo(interaction: discord.Interaction, member: discord.Member=Non
     embed.add_field(name="Joined At", value= member.joined_at.strftime("%a, %B %#d, %Y, %I:%M %p"))
     embed.add_field(name="Top Role", value=member.top_role.mention)
     await interaction.response.send_message(embed=embed, ephemeral=True)
+
+@client.tree.command(name="createpoll", description="Teammember can create a poll!")
+async def createpoll(interaction: discord.Interaction, question: str, option1: str, option2: str, option3: str=None):
+    option1count = 0
+    option2count = 0
+    option3count = 0
+    polllist = []
+    member = interaction.user
+    channel = client.get_channel(1095672565281865728)
+    await interaction.response.send_message(content="Poll created successful!", ephemeral=True)
+
+    if option3 == None:
+        embed = discord.Embed(title=question, description="",
+                              color=discord.Color.blue())
+        embed.add_field(name="1️⃣ " + option1, value="• 0")
+        embed.add_field(name="2️⃣ " + option2, value="• 0")
+        embed.set_footer(text="Created by " + str(interaction.user))
+        message = await channel.send(embed=embed)
+        await message.add_reaction("1️⃣")
+        await message.add_reaction("2️⃣")
+        while True:
+            reaction, user = await client.wait_for("reaction_add")
+            if user.id not in polllist and reaction.message.id == message.id:
+                await message.remove_reaction(reaction, user)
+                if reaction.emoji == "1️⃣":
+                    option1count = option1count + 1
+                if reaction.emoji == "2️⃣":
+                    option2count = option2count + 1
+
+                polllist.append(user.id)
+                embed2 = discord.Embed(title=question, description="",
+                                      color=discord.Color.blue())
+                embed2.add_field(name="1️⃣ " + option1, value="• " + str(option1count))
+                embed2.add_field(name="2️⃣ " + option2, value="• " + str(option2count))
+                embed2.set_footer(text="Created by " + str(interaction.user))
+                message = await message.edit(embed=embed2)
+
+            elif user.id in polllist and reaction.message.id == message.id:
+                await message.remove_reaction(reaction, user)
+                await user.send(content="You have already voted.")
+
+    else:
+        embed = discord.Embed(title=question, description="",
+                              color=discord.Color.blue())
+        embed.add_field(name="1️⃣ " + option1, value="• 0")
+        embed.add_field(name="2️⃣ " + option2, value="• 0")
+        embed.add_field(name="3️⃣ " + option3, value="• 0")
+        embed.set_footer(text="Created by " + str(interaction.user))
+        message = await channel.send(embed=embed)
+        await message.add_reaction("1️⃣")
+        await message.add_reaction("2️⃣")
+        await message.add_reaction("3️⃣")
+
+        while True:
+            reaction, user = await client.wait_for("reaction_add")
+            if user.id not in polllist and reaction.message.id == message.id:
+                await message.remove_reaction(reaction, user)
+                if reaction.emoji == "1️⃣":
+                    option1count = option1count + 1
+                if reaction.emoji == "2️⃣":
+                    option2count = option2count + 1
+                if reaction.emoji == "3️⃣":
+                    option3count = option3count + 1
+
+                polllist.append(user.id)
+                embed2 = discord.Embed(title=question, description="",
+                                      color=discord.Color.blue())
+                embed2.add_field(name="1️⃣ " + option1, value="• " + str(option1count))
+                embed2.add_field(name="2️⃣ " + option2, value="• " + str(option2count))
+                embed2.add_field(name="2️⃣ " + option3, value="• " + str(option3count))
+                embed2.set_footer(text="Created by " + str(interaction.user))
+                message = await message.edit(embed=embed2)
+
+            elif user.id in polllist and reaction.message.id == message.id:
+                await message.remove_reaction(reaction, user)
+                await user.send(content="You have already voted.")
 
 client.run(os.getenv("DISCORD_TOKEN"))
 
