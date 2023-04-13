@@ -298,8 +298,14 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
     if option3 == None:
         embed = discord.Embed(title=question, description="",
                               color=discord.Color.blue())
-        embed.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%")
-        embed.add_field(name="2️⃣ " + option2, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%")
+        embed.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
+        embed.add_field(name="2️⃣ " + option2, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
+        if max_select == None or max_select == 1:
+            embed.add_field(name="Select one", value="", inline=False)
+        elif max_select == 2:
+            embed.add_field(name="Select two", value="", inline=False)
+        elif max_select == 3:
+            embed.add_field(name="Select three", value="", inline=False)
         embed.add_field(name="Votes 0", value="", inline=False)
         embed.set_footer(text="Created by " + str(interaction.user))
         message = await channel.send(embed=embed)
@@ -325,61 +331,65 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                 embed2 = discord.Embed(title=question, description="",
                                       color=discord.Color.blue())
                 if a == 0:
-                    embed2.add_field(name="1️⃣ " + option1,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 10:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 20:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 30:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 40:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 50:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 60:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 70:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 80:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) <= 90:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) < 100:
-                    embed2.add_field(name="1️⃣ " + option1,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) == 100:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
 
                 if b == 0:
-                    embed2.add_field(name="2️⃣ " + option2,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 10:
-                    embed2.add_field(name="1️2️⃣ " + option2,value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="1️2️⃣ " + option2,value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 20:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 30:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 40:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 50:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 60:
-                    embed2.add_field(name="1️2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="1️2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 70:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 80:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) <= 90:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) < 100:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
                 elif round(b * 100) == 100:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
 
+                if max_select == None or max_select == 1:
+                    embed2.add_field(name="Select one", value="", inline=False)
+                elif max_select == 2:
+                    embed2.add_field(name="Select two", value="", inline=False)
                 embed2.add_field(name="Votes " + str(ergebnis), value="", inline=False)
                 embed2.set_footer(text="Created by " + str(interaction.user))
                 message = await message.edit(embed=embed2)
                 if anonymous == None or anonymous == "on":
                     pass
-                elif anonymous == "off":
+                elif anonymous == "off" or anonymous == "no" or anonymous == "No" or anonymous == "Off":
                     channel = client.get_channel(1095792970315333652)
                     await channel.send(str(user) + " have votet for " + reaction.emoji)
 
@@ -393,6 +403,12 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
         embed.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
         embed.add_field(name="2️⃣ " + option2, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
         embed.add_field(name="3️⃣ " + option3, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
+        if max_select == None or max_select == 1:
+            embed.add_field(name="Select one", value="", inline=False)
+        elif max_select == 2:
+            embed.add_field(name="Select two", value="", inline=False)
+        elif max_select == 3:
+            embed.add_field(name="Select three", value="", inline=False)
         embed.add_field(name="Votes 0", value="", inline=False)
         embed.set_footer(text="Created by " + str(interaction.user))
         message = await channel.send(embed=embed)
@@ -416,12 +432,13 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                 b = option2count / ergebnis
                 c = option3count / ergebnis
 
+                polllist.append(user.id)
                 if max_select == 2 and maxcount == 0:
                     maxcount = 2
                     polllist.remove(user.id)
-                elif max_select == 3 and maxcount == 0:
-                    maxcount = 3
+                elif max_select == 3 and maxcount != 2:
                     polllist.remove(user.id)
+                    maxcount = maxcount + 1
 
                 embed2 = discord.Embed(title=question, description="",
                                       color=discord.Color.blue())
@@ -570,12 +587,18 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
 
+                if max_select == None or max_select == 1:
+                    embed2.add_field(name="Select one", value="", inline=False)
+                elif max_select == 2:
+                    embed2.add_field(name="Select two", value="", inline=False)
+                elif max_select == 3:
+                    embed2.add_field(name="Select three", value="", inline=False)
                 embed2.add_field(name="Votes " + str(ergebnis), value="", inline=False)
                 embed2.set_footer(text="Created by " + str(interaction.user))
                 message = await message.edit(embed=embed2)
                 if anonymous == None or anonymous == "on":
                     pass
-                elif anonymous == "off":
+                elif anonymous == "off" or anonymous == "no" or anonymous == "No" or anonymous == "Off":
                     channel = client.get_channel(1095792970315333652)
                     await channel.send(str(user) + " have votet for " + reaction.emoji)
 
