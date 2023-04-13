@@ -113,6 +113,7 @@ async def changenick(interaction: discord.Interaction, nick: str, member: discor
     else:
         await test()
 
+#Report Command zu Slash Convertieren Hex raussuchen
 @client.command()
 async def report(ctx, member: discord.Member, Nachweis, * ,discription):
     if Nachweis.startswith("https://"):
@@ -137,16 +138,16 @@ async def report(ctx, member: discord.Member, Nachweis, * ,discription):
             reaction, user = await client.wait_for('reaction_add')
             if user != message.author and str(reaction.emoji) == '✅' and reaction.message.id == message.id:
                             embedVar4 = discord.Embed(title="Edited by " + str(user),
-                                                          description="The report by " + str(client.user.name) + " (" + str(
-                                                              client.user.id) + ") " + "was cancelled on " + str(zeit),
+                                                          description="The report by " + str(user.name) + " (" + str(
+                                                              user.id) + ") " + "was cancelled on " + str(zeit),
                                                           color=189018)
                             await message.clear_reactions()
                             await message.edit(embed=embedVar4)
 
             elif user != message.author and str(reaction.emoji) == '❌' and reaction.message.id == message.id:
                             embedVar3 = discord.Embed(title="Edited by " + str(user),
-                                                          description="The report by " + str(client.user.name) + " (" + str(
-                                                              client.user.id) + ") " + "was adopted on " + str(
+                                                          description="The report by " + str(user.name) + " (" + str(
+                                                              user.id) + ") " + "was adopted on " + str(
                                                               zeit) + ". Has been reported: " + str(member) + " because of " + discription,
                                                           color=990001)
                             await message.clear_reactions()
@@ -284,20 +285,22 @@ async def unserinfo(interaction: discord.Interaction, member: discord.Member=Non
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
 @client.tree.command(name="createpoll", description="Teammember can create a poll!")
-async def createpoll(interaction: discord.Interaction, question: str, option1: str, option2: str, option3: str=None):
+async def createpoll(interaction: discord.Interaction, question: str, option1: str, option2: str, anonymous: str=None, option3: str=None, max_select: int=None):
     option1count = 0
     option2count = 0
     option3count = 0
+    maxcount = 0
     polllist = []
     member = interaction.user
-    channel = client.get_channel(1095672565281865728)
+    channel = client.get_channel(1095786723872608337)
     await interaction.response.send_message(content="Poll created successful!", ephemeral=True)
 
     if option3 == None:
         embed = discord.Embed(title=question, description="",
                               color=discord.Color.blue())
-        embed.add_field(name="1️⃣ " + option1, value="• 0")
-        embed.add_field(name="2️⃣ " + option2, value="• 0")
+        embed.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%")
+        embed.add_field(name="2️⃣ " + option2, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%")
+        embed.add_field(name="Votes 0", value="", inline=False)
         embed.set_footer(text="Created by " + str(interaction.user))
         message = await channel.send(embed=embed)
         await message.add_reaction("1️⃣")
@@ -311,13 +314,74 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                 if reaction.emoji == "2️⃣":
                     option2count = option2count + 1
 
+                ergebnis = option1count + option2count
+                a = option1count/ergebnis
+                b = option2count/ergebnis
+
                 polllist.append(user.id)
+                if max_select == 2 and maxcount == 0:
+                    maxcount = 2
+                    polllist.remove(user.id)
                 embed2 = discord.Embed(title=question, description="",
                                       color=discord.Color.blue())
-                embed2.add_field(name="1️⃣ " + option1, value="• " + str(option1count))
-                embed2.add_field(name="2️⃣ " + option2, value="• " + str(option2count))
+                if a == 0:
+                    embed2.add_field(name="1️⃣ " + option1,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 10:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 20:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 30:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 40:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 50:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 60:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 70:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 80:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) <= 90:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) < 100:
+                    embed2.add_field(name="1️⃣ " + option1,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+                elif round(a * 100) == 100:
+                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option1count) + " " + str(round(a * 100)) + "%")
+
+                if b == 0:
+                    embed2.add_field(name="2️⃣ " + option2,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 10:
+                    embed2.add_field(name="1️2️⃣ " + option2,value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 20:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 30:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 40:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 50:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 60:
+                    embed2.add_field(name="1️2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 70:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 80:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) <= 90:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) < 100:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+                elif round(b * 100) == 100:
+                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option2count) + " " + str(round(b * 100)) + "%")
+
+                embed2.add_field(name="Votes " + str(ergebnis), value="", inline=False)
                 embed2.set_footer(text="Created by " + str(interaction.user))
                 message = await message.edit(embed=embed2)
+                if anonymous == None or anonymous == "on":
+                    pass
+                elif anonymous == "off":
+                    channel = client.get_channel(1095792970315333652)
+                    await channel.send(str(user) + " have votet for " + reaction.emoji)
 
             elif user.id in polllist and reaction.message.id == message.id:
                 await message.remove_reaction(reaction, user)
@@ -326,9 +390,10 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
     else:
         embed = discord.Embed(title=question, description="",
                               color=discord.Color.blue())
-        embed.add_field(name="1️⃣ " + option1, value="• 0")
-        embed.add_field(name="2️⃣ " + option2, value="• 0")
-        embed.add_field(name="3️⃣ " + option3, value="• 0")
+        embed.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
+        embed.add_field(name="2️⃣ " + option2, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
+        embed.add_field(name="3️⃣ " + option3, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
+        embed.add_field(name="Votes 0", value="", inline=False)
         embed.set_footer(text="Created by " + str(interaction.user))
         message = await channel.send(embed=embed)
         await message.add_reaction("1️⃣")
@@ -340,20 +405,179 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
             if user.id not in polllist and reaction.message.id == message.id:
                 await message.remove_reaction(reaction, user)
                 if reaction.emoji == "1️⃣":
-                    option1count = option1count + 1
+                  option1count = option1count + 1
                 if reaction.emoji == "2️⃣":
                     option2count = option2count + 1
                 if reaction.emoji == "3️⃣":
                     option3count = option3count + 1
 
-                polllist.append(user.id)
+                ergebnis = option1count + option2count + option3count
+                a = option1count / ergebnis
+                b = option2count / ergebnis
+                c = option3count / ergebnis
+
+                if max_select == 2 and maxcount == 0:
+                    maxcount = 2
+                    polllist.remove(user.id)
+                elif max_select == 3 and maxcount == 0:
+                    maxcount = 3
+                    polllist.remove(user.id)
+
                 embed2 = discord.Embed(title=question, description="",
                                       color=discord.Color.blue())
-                embed2.add_field(name="1️⃣ " + option1, value="• " + str(option1count))
-                embed2.add_field(name="2️⃣ " + option2, value="• " + str(option2count))
-                embed2.add_field(name="2️⃣ " + option3, value="• " + str(option3count))
+                if a == 0:
+                    embed2.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 10:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 20:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 30:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 40:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 50:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 60:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 70:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 80:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) <= 90:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) < 100:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+                elif round(a * 100) == 100:
+                    embed2.add_field(name="1️⃣ " + option1,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option1count) + " " + str(
+                                         round(a * 100)) + "%", inline=False)
+
+                if b == 0:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 10:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 20:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 30:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 40:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 50:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 60:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 70:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 80:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) <= 90:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) < 100:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+                elif round(b * 100) == 100:
+                    embed2.add_field(name="2️⃣ " + option2,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option2count) + " " + str(
+                                         round(b * 100)) + "%", inline=False)
+
+                if c == 0:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 10:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 20:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 30:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 40:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 50:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 60:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 70:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 80:
+                    embed2.add_field(name="2️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) <= 90:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) < 100:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+                elif round(c * 100) == 100:
+                    embed2.add_field(name="3️⃣ " + option3,
+                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option3count) + " " + str(
+                                         round(c * 100)) + "%", inline=False)
+
+                embed2.add_field(name="Votes " + str(ergebnis), value="", inline=False)
                 embed2.set_footer(text="Created by " + str(interaction.user))
                 message = await message.edit(embed=embed2)
+                if anonymous == None or anonymous == "on":
+                    pass
+                elif anonymous == "off":
+                    channel = client.get_channel(1095792970315333652)
+                    await channel.send(str(user) + " have votet for " + reaction.emoji)
 
             elif user.id in polllist and reaction.message.id == message.id:
                 await message.remove_reaction(reaction, user)
