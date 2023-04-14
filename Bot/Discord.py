@@ -296,6 +296,8 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
     await interaction.response.send_message(content="Poll created successful!", ephemeral=True)
 
     if option3 == None:
+        message = await channel.send("<@&" + str(1096397761865334864) + ">")
+        await message.delete()
         embed = discord.Embed(title=question, description="",
                               color=discord.Color.blue())
         embed.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
@@ -306,7 +308,7 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
             embed.add_field(name="Select two", value="", inline=False)
         elif max_select == 3:
             embed.add_field(name="Select three", value="", inline=False)
-        embed.add_field(name="Votes 0", value="", inline=False)
+        embed.add_field(name="`📊` Votes 0", value="", inline=False)
         embed.set_footer(text="Created by " + str(interaction.user))
         message = await channel.send(embed=embed)
         await message.add_reaction("1️⃣")
@@ -332,72 +334,70 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                                       color=discord.Color.blue())
                 if a == 0:
                     embed2.add_field(name="1️⃣ " + option1,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 10:
+                elif round(a * 100) >= 5 and round(a * 100) < 15:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 20:
+                elif round(a * 100) >= 15and round(a * 100) < 25:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 30:
+                elif round(a * 100) >= 25 and round(a * 100) < 35:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 40:
+                elif round(a * 100) >= 35 and round(a * 100) < 45:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 50:
+                elif round(a * 100) >= 45 and round(a * 100) < 55:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 60:
+                elif round(a * 100) >= 55 and round(a * 100) < 65:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 70:
+                elif round(a * 100) >= 65 and round(a * 100) < 75:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 80:
+                elif round(a * 100) >= 75 and round(a * 100) < 85:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 90:
+                elif round(a * 100) >= 85 and round(a * 100) < 95:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) < 100:
-                    embed2.add_field(name="1️⃣ " + option1,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) == 100:
-                    embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
+                elif round(a * 100) >= 95 and round(a * 100) <= 100:
+                    embed2.add_field(name="1️⃣ " + option1,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
 
                 if b == 0:
                     embed2.add_field(name="2️⃣ " + option2,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 10:
+                elif round(b * 100) >= 5 and round(b * 100) < 15:
                     embed2.add_field(name="1️2️⃣ " + option2,value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 20:
+                elif round(b * 100) >= 15 and round(b * 100) < 25:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 30:
+                elif round(b * 100) >= 25 and round(b * 100) < 35:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 40:
+                elif round(b * 100) >= 35 and round(b * 100) < 45:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 50:
+                elif round(b * 100) >= 45 and round(b * 100) < 55:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 60:
+                elif round(b * 100) >= 55 and round(b * 100) < 65:
                     embed2.add_field(name="1️2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 70:
+                elif round(b * 100) >= 65 and round(b * 100) < 75:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 80:
+                elif round(b * 100) >= 75 and round(b * 100) < 85:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 90:
+                elif round(b * 100) >= 85 and round(b * 100) < 95:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) < 100:
-                    embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
-                elif round(b * 100) == 100:
+                elif round(b * 100) >= 95 and round(b * 100) <= 100:
                     embed2.add_field(name="2️⃣ " + option2,value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option2count) + " " + str(round(b * 100)) + "%", inline=False)
 
                 if max_select == None or max_select == 1:
                     embed2.add_field(name="Select one", value="", inline=False)
                 elif max_select == 2:
                     embed2.add_field(name="Select two", value="", inline=False)
-                embed2.add_field(name="Votes " + str(ergebnis), value="", inline=False)
+                embed2.add_field(name="`📊` Votes " + str(ergebnis), value="", inline=False)
                 embed2.set_footer(text="Created by " + str(interaction.user))
                 message = await message.edit(embed=embed2)
                 if anonymous == None or anonymous == "on":
                     pass
                 elif anonymous == "off" or anonymous == "no" or anonymous == "No" or anonymous == "Off":
                     channel = client.get_channel(1095792970315333652)
-                    await channel.send(str(user) + " have votet for " + reaction.emoji)
+                    await channel.send(str(user) + " have votet for " + reaction.emoji + " The poll question is: " + question)
 
             elif user.id in polllist and reaction.message.id == message.id:
                 await message.remove_reaction(reaction, user)
                 await user.send(content="You have already voted.")
 
     else:
+        message = await channel.send("<@&" + str(1096397761865334864) + ">")
+        await message.delete()
         embed = discord.Embed(title=question, description="",
                               color=discord.Color.blue())
         embed.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • 0 0%", inline=False)
@@ -409,7 +409,7 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
             embed.add_field(name="Select two", value="", inline=False)
         elif max_select == 3:
             embed.add_field(name="Select three", value="", inline=False)
-        embed.add_field(name="Votes 0", value="", inline=False)
+        embed.add_field(name="`📊` Votes 0", value="", inline=False)
         embed.set_footer(text="Created by " + str(interaction.user))
         message = await channel.send(embed=embed)
         await message.add_reaction("1️⃣")
@@ -444,47 +444,43 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                                       color=discord.Color.blue())
                 if a == 0:
                     embed2.add_field(name="1️⃣ " + option1, value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 10:
+                elif round(a * 100) >= 5 and round(a * 100) <= 15:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 20:
+                elif round(a * 100) >= 15 and round(a * 100) < 25:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 30:
+                elif round(a * 100) >= 25 and round(a * 100) < 35:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 40:
+                elif round(a * 100) >= 35 and round(a * 100) < 45:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 50:
+                elif round(a * 100) >= 45 and round(a * 100) < 55:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 60:
+                elif round(a * 100) >= 55 and round(a * 100) < 65:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 70:
+                elif round(a * 100) >= 65 and round(a * 100) < 75:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 80:
+                elif round(a * 100) >= 75 and round(a * 100) < 85:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) <= 90:
+                elif round(a * 100) >= 85 and round(a * 100) < 95:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
-                elif round(a * 100) < 100:
-                    embed2.add_field(name="1️⃣ " + option1,
-                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option1count) + " " + str(
-                                         round(a * 100)) + "%", inline=False)
-                elif round(a * 100) == 100:
+                elif round(a * 100) >= 95 and round(a * 100) <= 100:
                     embed2.add_field(name="1️⃣ " + option1,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option1count) + " " + str(
                                          round(a * 100)) + "%", inline=False)
@@ -493,47 +489,43 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 10:
+                elif round(b * 100) >= 5 and round(b * 100) < 15:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 20:
+                elif round(b * 100) >= 15 and round(b * 100) < 25:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 30:
+                elif round(b * 100) >= 25 and round(b * 100) < 35:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 40:
+                elif round(b * 100) >= 35 and round(b * 100) < 45:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 50:
+                elif round(b * 100) >= 45 and round(b * 100) < 55:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 60:
+                elif round(b * 100) >= 55 and round(b * 100) < 65:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 70:
+                elif round(b * 100) >= 65 and round(b * 100) < 75:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 80:
+                elif round(b * 100) >= 75 and round(b * 100) < 85:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) <= 90:
+                elif round(b * 100) >= 85 and round(b * 100) < 95:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
-                elif round(b * 100) < 100:
-                    embed2.add_field(name="2️⃣ " + option2,
-                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option2count) + " " + str(
-                                         round(b * 100)) + "%", inline=False)
-                elif round(b * 100) == 100:
+                elif round(b * 100) >= 95 and round(b * 100) <= 100:
                     embed2.add_field(name="2️⃣ " + option2,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option2count) + " " + str(
                                          round(b * 100)) + "%", inline=False)
@@ -542,49 +534,45 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 10:
+                elif round(c * 100) >= 5 and round(c * 100) < 15:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 20:
+                elif round(c * 100) >= 15 and round(c * 100) < 25:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 30:
+                elif round(c * 100) >= 25 and round(c * 100) < 35:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 40:
+                elif round(c * 100) >= 35 and round(c * 100) < 45:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦🟦🟦⬛⬛⬛⬛⬛⬛`  • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 50:
+                elif round(c * 100) >= 45 and round(c * 100) < 55:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 60:
+                elif round(c * 100) >= 55 and round(c * 100) < 65:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 70:
+                elif round(c * 100) >= 65 and round(c * 100) < 75:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 80:
+                elif round(c * 100) >= 75 and round(c * 100) < 85:
                     embed2.add_field(name="2️⃣ " + option3,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) <= 90:
+                elif round(c * 100) >= 85 and round(c * 100) < 95:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
-                elif round(c * 100) < 100:
+                elif round(c * 100) >= 95 and round(c * 100) <= 100:
                     embed2.add_field(name="3️⃣ " + option3,
                                      value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛` • " + str(option3count) + " " + str(
-                                         round(c * 100)) + "%", inline=False)
-                elif round(c * 100) == 100:
-                    embed2.add_field(name="3️⃣ " + option3,
-                                     value="`🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦` • " + str(option3count) + " " + str(
                                          round(c * 100)) + "%", inline=False)
 
                 if max_select == None or max_select == 1:
@@ -593,14 +581,14 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                     embed2.add_field(name="Select two", value="", inline=False)
                 elif max_select == 3:
                     embed2.add_field(name="Select three", value="", inline=False)
-                embed2.add_field(name="Votes " + str(ergebnis), value="", inline=False)
+                embed2.add_field(name="`📊` Votes " + str(ergebnis), value="", inline=False)
                 embed2.set_footer(text="Created by " + str(interaction.user))
                 message = await message.edit(embed=embed2)
                 if anonymous == None or anonymous == "on":
                     pass
                 elif anonymous == "off" or anonymous == "no" or anonymous == "No" or anonymous == "Off":
                     channel = client.get_channel(1095792970315333652)
-                    await channel.send(str(user) + " have votet for " + reaction.emoji)
+                    await channel.send(str(user) + " have votet for " + reaction.emoji + " The question is: " + question)
 
             elif user.id in polllist and reaction.message.id == message.id:
                 await message.remove_reaction(reaction, user)
