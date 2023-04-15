@@ -27,7 +27,7 @@ list = ["✅", "💻", "🔒", "🔐"]
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
     print("Gamius (1069597015899643944) ist jetzt startklar.")
-    synced = await client.tree.sync()
+    sync = await client.tree.sync()
 
 @client.event
 async def on_message(message):
@@ -113,17 +113,17 @@ async def changenick(interaction: discord.Interaction, nick: str, member: discor
     else:
         await test()
 
-#Report Command zu Slash Convertieren Hex raussuchen
-@client.command()
-async def report(ctx, member: discord.Member, Nachweis, * ,discription):
-    if Nachweis.startswith("https://"):
-        await ctx.message.delete()
+@client.tree.command(name="report", description="report command")
+async def report(interaction: discord.Interaction, member: discord.Member,discription: str, proof: str ):
+    nutzer = interaction.user
+
+    if proof.startswith("https://"):
         zeit = date.today()
-        await ctx.author.send(f'You have report {member.mention} on ' + str(zeit) + ' because of: ' + '"' + discription + '". \nOur Team check that!')
+        await interaction.response.send_message(content=f'You have report {member.mention} on ' + str(zeit) + ' because of: ' + '"' + discription + '". \nOur Team check that!', ephemeral=True)
         channel = client.get_channel(1094744985175347260) #ID des jeweiligen Channels
         embedVar2 = discord.Embed(title="Report", description=str(client.user.name) + " (" + str(client.user.id) + ")" + " have reported " + member.mention , color=797979)
         embedVar2.add_field(name="Reason", value=discription, inline=False)
-        embedVar2.add_field(name="Proof", value=Nachweis, inline=False)
+        embedVar2.add_field(name="Proof", value=proof, inline=False)
         embedVar2.add_field(name="Day", value=zeit, inline=False)
         embedVar2.add_field(name="Procedure", value="Press ✅ to cancel the report or press ❌ to caution the user! ", inline=False)
         message = await channel.send(embed=embedVar2)
@@ -155,8 +155,7 @@ async def report(ctx, member: discord.Member, Nachweis, * ,discription):
                             await member.send("You was reported at " + str(guild.name) + " because " + discription)
 
     else:
-        await ctx.message.delete()
-        await ctx.author.send("Please provide a link to the message. If this message no longer exists, please enter the channel in which the event happened!")
+        await interaction.response.send_message(content="Please provide a link to the message. If this message no longer exists, please enter the channel in which the event happened!", ephemeral=True)
 
 @client.event
 async def on_raw_reaction_add(payload):
