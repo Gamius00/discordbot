@@ -593,5 +593,14 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                 await message.remove_reaction(reaction, user)
                 await user.send(content="You have already voted.")
 
+@client.tree.command(name="echo", description="The Bot say that you write")
+async def echo(interaction: discord.Interaction, message: str, channel: discord.TextChannel= None):
+    if channel == None:
+        channel = interaction.channel
+    else:
+        channel = channel
+    await interaction.response.send_message(content="Nachicht erfolgreich versendet!", ephemeral=True)
+    await channel.send(message)
+
 client.run(os.getenv("DISCORD_TOKEN"))
 
