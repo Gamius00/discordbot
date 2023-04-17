@@ -121,7 +121,7 @@ async def report(interaction: discord.Interaction, member: discord.Member,descri
         zeit = date.today()
         await interaction.response.send_message(content=f'You have report {member.mention} on ' + str(zeit) + ' because of: ' + '"' + description + '". \nOur Team check that!', ephemeral=True)
         channel = client.get_channel(1094744985175347260) #ID des jeweiligen Channels
-        embedVar2 = discord.Embed(title="Report", description=str(member.name) + " (" + str(member.id) + ")" + " have reported " + member.mention , color=797979)
+        embedVar2 = discord.Embed(title="Report", description=str(nutzer.name) + " (" + str(nutzer.id) + ")" + " have reported " + member.mention , color=797979)
         embedVar2.add_field(name="Reason", value=description, inline=False)
         embedVar2.add_field(name="Proof", value=proof, inline=False)
         embedVar2.add_field(name="Day", value=zeit, inline=False)
