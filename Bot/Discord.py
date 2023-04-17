@@ -114,15 +114,15 @@ async def changenick(interaction: discord.Interaction, nick: str, member: discor
         await test()
 
 @client.tree.command(name="report", description="report command")
-async def report(interaction: discord.Interaction, member: discord.Member,discription: str, proof: str ):
+async def report(interaction: discord.Interaction, member: discord.Member,description: str, proof: str ):
     nutzer = interaction.user
 
     if proof.startswith("https://"):
         zeit = date.today()
-        await interaction.response.send_message(content=f'You have report {member.mention} on ' + str(zeit) + ' because of: ' + '"' + discription + '". \nOur Team check that!', ephemeral=True)
+        await interaction.response.send_message(content=f'You have report {member.mention} on ' + str(zeit) + ' because of: ' + '"' + description + '". \nOur Team check that!', ephemeral=True)
         channel = client.get_channel(1094744985175347260) #ID des jeweiligen Channels
-        embedVar2 = discord.Embed(title="Report", description=str(client.user.name) + " (" + str(client.user.id) + ")" + " have reported " + member.mention , color=797979)
-        embedVar2.add_field(name="Reason", value=discription, inline=False)
+        embedVar2 = discord.Embed(title="Report", description=str(member.name) + " (" + str(member.id) + ")" + " have reported " + member.mention , color=797979)
+        embedVar2.add_field(name="Reason", value=description, inline=False)
         embedVar2.add_field(name="Proof", value=proof, inline=False)
         embedVar2.add_field(name="Day", value=zeit, inline=False)
         embedVar2.add_field(name="Procedure", value="Press ✅ to cancel the report or press ❌ to caution the user! ", inline=False)
@@ -148,11 +148,11 @@ async def report(interaction: discord.Interaction, member: discord.Member,discri
                             embedVar3 = discord.Embed(title="Edited by " + str(user),
                                                           description="The report by " + str(user.name) + " (" + str(
                                                               user.id) + ") " + "was adopted on " + str(
-                                                              zeit) + ". Has been reported: " + str(member) + " because of " + discription,
+                                                              zeit) + ". Has been reported: " + str(member) + " because of " + description,
                                                           color=990001)
                             await message.clear_reactions()
                             await message.edit(embed=embedVar3)
-                            await member.send("You was reported at " + str(guild.name) + " because " + discription)
+                            await member.send("You was reported at " + str(guild.name) + " because " + description)
 
     else:
         await interaction.response.send_message(content="Please provide a link to the message. If this message no longer exists, please enter the channel in which the event happened!", ephemeral=True)
