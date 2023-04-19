@@ -14,20 +14,23 @@ load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
 client = commands.Bot(command_prefix=".", intents=intents)
 name = None
 did_ask_for_name = False
 names = []
-# Gamius Jabok Kip Dicilucs Aggression Kage
-moderatoren = [726409024894926869, 779381502311137301, 211441083434008576, 978739541877878844, 868155018287661117, 263907031084302336]
 random = randint(0, 3)
 list = ["✅", "💻", "🔒", "🔐"]
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
     print("Gamius (1069597015899643944) ist jetzt startklar.")
     sync = await client.tree.sync()
+    while True:
+        await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
+        await asyncio.sleep(40)
+        await client.change_presence(activity=discord.Activity(type=ActivityType.playing, name="/help"))
+        await asyncio.sleep(3)
 
 @client.event
 async def on_message(message):
@@ -82,12 +85,22 @@ async def on_message(message):
 
 @client.tree.command(name="changenick", description="With this command you can change your nick at this Server!")
 async def changenick(interaction: discord.Interaction, nick: str, member: discord.Member=None):
+    guild = client.get_guild(1086939783374315530)
+    modrole = discord.utils.get(guild.roles, name="🛡️ | Moderator")
+    adminrole = discord.utils.get(guild.roles, name="🎓 | Admin")
+    members = modrole.members
+    admin = adminrole.members
+    moderatoren = [modmember.id for modmember in members]
+    admin = [adminmember.id for adminmember in admin]
+    team = moderatoren + admin
+
     async def test():
+
         if interaction.user == member:
             await member.edit(nick=nick)
             await interaction.response.send_message(content=f'Nickname from user {member} was changed to {member.mention}', ephemeral=True)
 
-        elif interaction.user != member and interaction.user.id in moderatoren:
+        elif interaction.user != member and interaction.user.id in team:
             await member.edit(nick=nick)
             await interaction.response.send_message(content=f'Nickname from user {member} was changed to {member.mention}', ephemeral=True)
 
@@ -104,7 +117,7 @@ async def changenick(interaction: discord.Interaction, nick: str, member: discor
             await member.edit(nick=None)
             await interaction.response.send_message(content=f'Nickname from user {member} was reseted', ephemeral=True)
 
-        elif interaction.user != member and interaction.user.id in moderatoren:
+        elif interaction.user != member and interaction.user.id in team:
             await member.edit(nick=None)
             await interaction.response.send_message(content=f'Nickname from user {member} was reseted', ephemeral=True)
 
@@ -159,6 +172,15 @@ async def report(interaction: discord.Interaction, member: discord.Member,descri
 
 @client.event
 async def on_raw_reaction_add(payload):
+    guild = client.get_guild(1086939783374315530)
+    modrole = discord.utils.get(guild.roles, name="🛡️ | Moderator")
+    adminrole = discord.utils.get(guild.roles, name="🎓 | Admin")
+    members = modrole.members
+    admin = adminrole.members
+    moderatoren = [modmember.id for modmember in members]
+    admin = [adminmember.id for adminmember in admin]
+    team = moderatoren + admin
+
     message_id = payload.message_id
     member = payload.member
 
@@ -204,11 +226,11 @@ async def on_raw_reaction_add(payload):
                             print("The Ticket of: " + str(client.user.id) + " was closed.")
                             names.remove(member.id)
 
-                        elif close == False and user.id not in moderatoren:
+                        elif close == False and user.id not in team:
                             await message.remove_reaction("🔒", user)
                             await user.send("**Please wait until this ticket has been claimed or a moderator closes this ticket. \nYou can't close the ticket because we don't want one person to open too many tickets!**")
 
-                        elif close == False and user.id in moderatoren:
+                        elif close == False and user.id in team:
                             close = True
                             await channel.delete()
                             print("The Ticket of: " + str(client.user.id) + " wurde geschlossen.")
@@ -258,10 +280,10 @@ async def reset(message):
 async def help(interaction: discord.Interaction):
     embedVar = discord.Embed(title="Help Command",
                              description="")
-    embedVar.add_field(name=".report {user} proof(link) reason", value="",
+    embedVar.add_field(name="/report {user} proof(link) reason", value="",
                        inline=False)
-    embedVar.add_field(name=".ticket {question}", value="", inline=False)
-    embedVar.add_field(name=".changenick {member} {new nick}", value="", inline=False)
+    embedVar.add_field(name="/changenick {member} {new nick}", value="", inline=False)
+    embedVar.add_field(name="/userinfo", value="", inline=False)
     time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
     embedVar.set_footer(text="© Gamius",
                         icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
@@ -312,8 +334,33 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
         message = await channel.send(embed=embed)
         await message.add_reaction("1️⃣")
         await message.add_reaction("2️⃣")
+        channel = client.get_channel(1098303576276733972)
+        cembed = discord.Embed(title="Cancel", description="",
+                               color=discord.Color.red())
+        cembed.add_field(name="Press \❌ for Cancel", value="", inline=False)
+        cembed.add_field(name="Pollquestion", value=question, inline=False)
+        cembed.add_field(name="Created by", value=interaction.user, inline=False)
+        cembedmessage = await channel.send(embed=cembed)
+        await cembedmessage.add_reaction("❌")
+
         while True:
             reaction, user = await client.wait_for("reaction_add")
+            if reaction.emoji == "❌" and reaction.message.id == cembedmessage.id:
+                await cembedmessage.clear_reactions()
+                embed = discord.Embed(title=question, description="Poll was cancelled",
+                                       color=discord.Color.red())
+
+                highest_count = max(option1count, option2count, option3count)
+
+                if highest_count == option1count:
+                    embed.add_field(name="The most votes had " + option1, value="Votes " + str(option1count), inline=False)
+                elif highest_count == option2count:
+                    embed.add_field(name="The most votes had " + option2, value="Votes " + str(option2count), inline=False)
+                else:
+                    embed.add_field(name="The most votes had " + option3, value="Votes " + str(option3count), inline=False)
+
+                embed = await message.edit(embed=embed)
+                await message.clear_reactions()
             if user.id not in polllist and reaction.message.id == message.id:
                 await message.remove_reaction(reaction, user)
                 if reaction.emoji == "1️⃣":
@@ -414,9 +461,34 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
         await message.add_reaction("1️⃣")
         await message.add_reaction("2️⃣")
         await message.add_reaction("3️⃣")
+        channel = client.get_channel(1098303576276733972)
+        cembed = discord.Embed(title="Cancel", description="",
+                              color=discord.Color.red())
+        cembed.add_field(name="Press \❌ for Cancel", value="", inline=False)
+        cembed.add_field(name="Pollquestion", value=question, inline=False)
+        cembed.add_field(name="Created by", value=interaction.user, inline=False)
+        cembedmessage = await channel.send(embed=cembed)
+        await cembedmessage.add_reaction("❌")
 
         while True:
             reaction, user = await client.wait_for("reaction_add")
+            if reaction.emoji == "❌" and reaction.message.id == cembedmessage.id:
+                await cembedmessage.clear_reactions()
+                embed = discord.Embed(title=question, description="Poll was cancelled",
+                                       color=discord.Color.red())
+
+                highest_count = max(option1count, option2count, option3count)
+
+                if highest_count == option1count:
+                    embed.add_field(name="The most votes had " + option1, value="Votes " + str(option1count), inline=False)
+                elif highest_count == option2count:
+                    embed.add_field(name="The most votes had " + option2, value="Votes " + str(option2count), inline=False)
+                else:
+                    embed.add_field(name="The most votes had " + option3, value="Votes " + str(option3count), inline=False)
+
+                embed = await message.edit(embed=embed)
+                await message.clear_reactions()
+
             if user.id not in polllist and reaction.message.id == message.id:
                 await message.remove_reaction(reaction, user)
                 if reaction.emoji == "1️⃣":
@@ -599,7 +671,7 @@ async def echo(interaction: discord.Interaction, message: str, channel: discord.
         channel = interaction.channel
     else:
         channel = channel
-    await interaction.response.send_message(content="Nachicht erfolgreich versendet!", ephemeral=True)
+    await interaction.response.send_message(content="Message sended succesful!", ephemeral=True)
     await channel.send(message)
 
 client.run(os.getenv("DISCORD_TOKEN"))
