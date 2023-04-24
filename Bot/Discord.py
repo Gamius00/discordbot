@@ -28,9 +28,9 @@ async def on_ready():
     sync = await client.tree.sync()
     while True:
         await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
-        await asyncio.sleep(40)
+        await asyncio.sleep(30)
         await client.change_presence(activity=discord.Activity(type=ActivityType.playing, name="/help"))
-        await asyncio.sleep(3)
+        await asyncio.sleep(10)
 
 @client.event
 async def on_message(message):
