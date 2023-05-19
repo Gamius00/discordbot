@@ -26,11 +26,8 @@ list = ["✅", "💻", "🔒", "🔐"]
 async def on_ready():
     print("Gamius (1069597015899643944) ist jetzt startklar.")
     sync = await client.tree.sync()
-    while True:
-        await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
-        await asyncio.sleep(30)
-        await client.change_presence(activity=discord.Activity(type=ActivityType.playing, name="/help"))
-        await asyncio.sleep(10)
+    await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
+
 
 @client.event
 async def on_message(message):
@@ -270,6 +267,13 @@ async def on_raw_reaction_add(payload):
                     if channel.name != "ticket-" + str(member.id):
                         await code()
                         return
+
+
+@client.command()
+async def start(ctx):
+    while True:
+        await asyncio.sleep(7200)
+        await ctx.send("<@" + str(779381502311137301) + ">" + " It's time to make advertising")
 
 
 @client.command()
