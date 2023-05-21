@@ -270,15 +270,19 @@ async def on_raw_reaction_add(payload):
 
 
 @client.command()
-async def start(ctx):
-    while True:
-        await asyncio.sleep(7200)
-        await ctx.send("<@" + str(779381502311137301) + ">" + " It's time to make advertising")
-
-
-@client.command()
 async def reset(message):
     names.clear()
+
+@client.command()
+async def start(message):
+    user = client.get_user(726409024894926869)
+    if message.author.id == 726409024894926869:
+        while True:
+            await user.send("Du kannst jetzt Bumpen")
+            await asyncio.sleep(7200)
+
+
+
 
 @client.tree.command(name="help", description="This ist the Help command!")
 async def help(interaction: discord.Interaction):
