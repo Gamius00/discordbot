@@ -276,7 +276,7 @@ async def reset(message):
 @client.command()
 async def start(message):
     user = client.get_user(726409024894926869)
-    if message.author.id == 726409024894926869:
+    if message.author.id == 779381502311137301:
         while True:
             await user.send("Du kannst jetzt Bumpen")
             await asyncio.sleep(7200)
