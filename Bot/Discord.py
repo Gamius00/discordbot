@@ -1,6 +1,7 @@
 import asyncio
 import os
 import discord
+from convex import ConvexClient
 from discord.ext import commands
 from discord.utils import get
 import datetime
@@ -9,6 +10,7 @@ from discord import ActivityType
 from datetime import datetime
 from random import *
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -21,6 +23,8 @@ did_ask_for_name = False
 names = []
 random = randint(0, 3)
 list = ["✅", "💻", "🔒", "🔐"]
+
+load_dotenv(".env")
 
 @client.event
 async def on_ready():
@@ -390,7 +394,7 @@ async def createpoll(interaction: discord.Interaction, question: str, option1: s
                     embed2.add_field(name="1️⃣ " + option1,value="`⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) >= 5 and round(a * 100) < 15:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦⬛⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
-                elif round(a * 100) >= 15and round(a * 100) < 25:
+                elif round(a * 100) >= 15 and round(a * 100) < 25:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦⬛⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
                 elif round(a * 100) >= 25 and round(a * 100) < 35:
                     embed2.add_field(name="1️⃣ " + option1, value="`🟦🟦🟦⬛⬛⬛⬛⬛⬛⬛` • " + str(option1count) + " " + str(round(a * 100)) + "%", inline=False)
@@ -681,6 +685,18 @@ async def echo(interaction: discord.Interaction, message: str, channel: discord.
         channel = channel
     await interaction.response.send_message(content="Message sended succesful!", ephemeral=True)
     await channel.send(message)
+
+@client.tree.command(name="test", description="This is a DataBase Test")
+async def test(interaction: discord.Interaction, channel: discord.TextChannel= None):
+    load_dotenv(".env.local")
+    CONVEX_URL = os.getenv("CONVEX_URL")
+    data = str(ConvexClient(CONVEX_URL).query("getData:get"))
+    
+    if channel == None:
+        channel = interaction.channel
+    else:
+        channel = channel
+    await channel.send(data)
 
 client.run(os.getenv("DISCORD_TOKEN"))
 
