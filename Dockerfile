@@ -2,7 +2,7 @@ FROM python:latest
 
 WORKDIR /bot
 
-COPY . .
+COPY /Bot .
 
 RUN pip install discord asyncio datetime python-dotenv
 
