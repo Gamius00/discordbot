@@ -7,4 +7,4 @@ COPY /Bot .
 RUN pip install discord asyncio datetime python-dotenv
 
 
-CMD ["python", "./Bot/Discord.py"]
+CMD ["python", "Discord.py"]
