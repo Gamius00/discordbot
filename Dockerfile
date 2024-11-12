@@ -4,7 +4,7 @@ WORKDIR /bot
 
 COPY /Bot .
 
-RUN pip install -r requirements.txt --no-index
+RUN pip install -r requirements.txt
 
 
 CMD ["python", "Discord.py"]
