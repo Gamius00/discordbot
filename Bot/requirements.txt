@@ -1,7 +1,7 @@
 aiohttp
 aiosignal
+audioop-lts
 attrs
-audioop-Its
 certifi
 charset-normalizer
 convex
