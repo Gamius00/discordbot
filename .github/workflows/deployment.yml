@@ -36,7 +36,7 @@ jobs:
         run: |
           touch .env
           echo DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} >> .env
-          echo CONVEX_DEPLOXMENT=${{ secrets.CONVEX_DEPLOXMENT }} >> .env
+          echo CONVEX_DEPLOYMENT=${{ secrets.CONVEX_DEPLOYMENT }} >> .env
           echo CONVEX_URL=${{ secrets.CONVEX_URL }} >> .env
           cat .env
       - name: Prepare
