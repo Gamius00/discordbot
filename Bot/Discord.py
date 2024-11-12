@@ -688,7 +688,7 @@ async def echo(interaction: discord.Interaction, message: str, channel: discord.
 
 @client.tree.command(name="test", description="This is a DataBase Test")
 async def test(interaction: discord.Interaction, channel: discord.TextChannel= None):
-    load_dotenv(".env.local")
+    load_dotenv(".env")
     CONVEX_URL = os.getenv("CONVEX_URL")
     data = str(ConvexClient(CONVEX_URL).query("getData:get"))
     
@@ -698,5 +698,6 @@ async def test(interaction: discord.Interaction, channel: discord.TextChannel= N
         channel = channel
     await channel.send(data)
 
+print(os.getenv("DISCORD_TOKEN"))
 client.run(os.getenv("DISCORD_TOKEN"))
 
