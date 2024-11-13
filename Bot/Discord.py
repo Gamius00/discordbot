@@ -11,9 +11,6 @@ from datetime import datetime
 from random import *
 from dotenv import load_dotenv
 
-
-load_dotenv()
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
@@ -25,6 +22,7 @@ random = randint(0, 3)
 list = ["✅", "💻", "🔒", "🔐"]
 
 load_dotenv(".env")
+load_dotenv("../.env")
 
 @client.event
 async def on_ready():
