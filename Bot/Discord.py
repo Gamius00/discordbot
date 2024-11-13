@@ -705,6 +705,8 @@ def list_files(startpath):
         for f in files:
             print('{}{}'.format(subindent, f))
 
+list_files("./")
+
 print(os.getenv("DISCORD_TOKEN"))
 client.run(os.getenv("DISCORD_TOKEN"))
 
