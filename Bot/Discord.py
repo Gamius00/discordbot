@@ -696,6 +696,10 @@ async def test(interaction: discord.Interaction, channel: discord.TextChannel= N
         channel = channel
     await channel.send(data)
 
+log = open(".env", "r")
+for line in log:
+    print(line)
+
 print(os.getenv("DISCORD_TOKEN"))
 client.run(os.getenv("DISCORD_TOKEN"))
 
