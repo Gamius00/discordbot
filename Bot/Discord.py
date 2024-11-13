@@ -22,7 +22,6 @@ random = randint(0, 3)
 list = ["✅", "💻", "🔒", "🔐"]
 
 load_dotenv(".env")
-load_dotenv("../.env")
 
 @client.event
 async def on_ready():
