@@ -24,8 +24,6 @@ names = []
 random = randint(0, 3)
 list = ["✅", "💻", "🔒", "🔐"]
 
-load_dotenv(".env")
-
 @client.event
 async def on_ready():
     print("Gamius (1069597015899643944) ist jetzt startklar.")
