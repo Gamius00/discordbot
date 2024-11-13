@@ -696,17 +696,6 @@ async def test(interaction: discord.Interaction, channel: discord.TextChannel= N
         channel = channel
     await channel.send(data)
 
-def list_files(startpath):
-    for root, dirs, files in os.walk(startpath):
-        level = root.replace(startpath, '').count(os.sep)
-        indent = ' ' * 4 * (level)
-        print('{}{}/'.format(indent, os.path.basename(root)))
-        subindent = ' ' * 4 * (level + 1)
-        for f in files:
-            print('{}{}'.format(subindent, f))
-
-list_files("/")
-
 print(os.getenv("DISCORD_TOKEN"))
 client.run(os.getenv("DISCORD_TOKEN"))
 
