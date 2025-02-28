@@ -206,6 +206,10 @@ async def on_raw_reaction_add(payload):
         if message_id == 1095439527516065843:
             member = member
             Mod = get(member.guild.roles, name="🛡️ | Moderator")
+            channel = client.get_channel(payload.channel_id)  # Get the channel
+            message = await channel.fetch_message(payload.message_id)
+            await message.remove_reaction(payload.emoji, member)
+
             guild = member.guild
 
             overwrites = {
@@ -715,6 +719,5 @@ async def test(interaction: discord.Interaction, channel: discord.TextChannel= N
         channel = channel
     await channel.send(data)
 
-print(os.getenv("DISCORD_TOKEN"))
 client.run(os.getenv("DISCORD_TOKEN"))
 
