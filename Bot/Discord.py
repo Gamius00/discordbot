@@ -68,19 +68,38 @@ async def on_message(message):
                                             icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
                         await channel.send(embed=embedVar)
 
-        if message.content == "?help":
-            embedVar = discord.Embed(title="Help Command",
-                                     description="")
-            embedVar.add_field(name=".report {user} proof(link) reason", value="",
-                               inline=False)
-            embedVar.add_field(name=".ticket {question}", value="", inline=False)
-            embedVar.add_field(name=".changenick {member} {new nick}", value="", inline=False)
-            time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
-            embedVar.set_footer(text="© Gamius",
-                                icon_url="https://cdn.discordapp.com/attachments/1020628377243242537/1091686027598495855/logo-6062235_960_720.png")
-            await message.channel.send(embed=embedVar, ephemeral=True)
-
         await test()
+
+@client.event
+async def on_member_join(member):
+    channel_log = client.get_channel(1345087784364282009)
+    channel_general = client.get_channel(1086948239414153286)
+    role = member.guild.get_role(1094284980089278564)
+    guild = member.guild
+    time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+    member_count = guild.get_channel(1345097985213857823)
+    await member.add_roles(role)
+    embedVar = discord.Embed(title=f"Member: {member} joined!", description="")
+    embedVar.add_field(name="Joined at: ", value=time, inline=False)
+    embedVar.add_field(name="Current member count: ", value=guild.member_count, inline=False)
+    await channel_log.send(embed=embedVar)
+    await channel_general.send(f"Hello {member}! We are {guild.member_count} members now! You can introduce yourself in the 👋 introductions channel!")
+    await member_count.edit(name="Member Count: " + str(guild.member_count))
+
+@client.event
+async def on_member_remove(member):
+    channel_log = client.get_channel(1345087784364282009)
+    guild = member.guild
+    time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+    member_count = guild.get_channel(1345097985213857823)
+    embedVar = discord.Embed(title=f"Member: {member} left!", description="")
+    embedVar.add_field(name="Left at: ", value=time, inline=False)
+    embedVar.add_field(name="Current member count: ", value=guild.member_count, inline=False)
+    await channel_log.send(embed=embedVar)
+    await member_count.edit(name="Member Count: " + str(guild.member_count))
+
+
+
 
 @client.tree.command(name="changenick", description="With this command you can change your nick at this Server!")
 async def changenick(interaction: discord.Interaction, nick: str, member: discord.Member=None):
