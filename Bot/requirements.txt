@@ -16,3 +16,5 @@ python-dotenv
 requests
 urllib3
 yarl
+quickchart-io
+schedule
