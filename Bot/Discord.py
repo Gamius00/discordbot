@@ -97,7 +97,7 @@ async def on_ready():
     print("Gamius (1069597015899643944) ist jetzt startklar.")
     sync = await client.tree.sync()
     await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
-    schedule.every(30).day.do(sync_job)
+    schedule.every(30).days.do(sync_job)
     while True:
         schedule.run_pending()
         await asyncio.sleep(60)
