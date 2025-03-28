@@ -8,7 +8,6 @@ import datetime
 from datetime import date
 import schedule
 from discord import ActivityType
-import time
 from datetime import datetime
 from random import *
 from dotenv import load_dotenv
@@ -100,8 +99,7 @@ def sync_job():
 async def on_ready():
     print("Creativo (1069597015899643944) ist jetzt startklar.")
     member = client.get_user(726409024894926869)
-    time = date.today()
-    await member.send("Hallo Fabius Schurig, ich wurde gerade neugestartet! " +  str(time.strftime("**(%H:%M, %d.%m.%Y)**")))
+    await member.send("Hallo Fabius Schurig, ich wurde gerade neugestartet! " +  datetime.now().strftime('**(%H:%M:%S, %d.%m.%Y)**'))
     await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
     schedule.every(30).days.do(sync_job)
     while True:
