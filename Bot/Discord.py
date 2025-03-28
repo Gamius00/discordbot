@@ -38,8 +38,6 @@ async def job():
     guild = client.get_guild(1086939783374315530)
     load_dotenv(".env")
     CONVEX_URL = os.getenv("CONVEX_URL")
-    convex = ConvexClient(CONVEX_URL)
-    convex.mutation("setData:createEntry", {"count": guild.member_count})
     data = ConvexClient(CONVEX_URL).query("getData:getInfo")
 
     member_counts = {}
@@ -100,8 +98,10 @@ def sync_job():
 
 @client.event
 async def on_ready():
-    print("Gamius (1069597015899643944) ist jetzt startklar.")
-    sync = await client.tree.sync()
+    print("Creativo (1069597015899643944) ist jetzt startklar.")
+    member = client.get_user(726409024894926869)
+    time = date.today()
+    await member.send("Hallo Fabius Schurig, ich wurde gerade neugestartet! " +  str(time.strftime("**(%H:%M, %d.%m.%Y)**")))
     await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
     schedule.every(30).days.do(sync_job)
     while True:
