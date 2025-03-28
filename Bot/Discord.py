@@ -28,6 +28,12 @@ current_url = ""
 load_dotenv(".env")
 load_dotenv("../.env")
 
+async def createNewCountEntry():
+    guild = client.get_guild(1086939783374315530)
+    CONVEX_URL = os.getenv("CONVEX_URL")
+    convex = ConvexClient(CONVEX_URL)
+    convex.mutation("setData:createEntry", {"count": guild.member_count})
+
 async def job():
     guild = client.get_guild(1086939783374315530)
     load_dotenv(".env")
@@ -157,6 +163,7 @@ async def on_member_join(member):
     await channel_log.send(embed=embedVar)
     await channel_general.send(f"Hello {member}! We are {guild.member_count} members now! You can introduce yourself in the 👋 introductions channel!")
     await member_count.edit(name="Member Count: " + str(guild.member_count))
+    await createNewCountEntry()
 
 @client.event
 async def on_member_remove(member):
@@ -170,6 +177,7 @@ async def on_member_remove(member):
     embedVar.add_field(name="Current member count: ", value=guild.member_count, inline=False)
     await channel_log.send(embed=embedVar)
     await member_count.edit(name="Member Count: " + str(guild.member_count))
+    await createNewCountEntry()
 
 
 
