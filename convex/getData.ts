@@ -7,6 +7,13 @@ export const getTasks = query({
   },
 });
 
+export const getMemberCount = query({
+  handler: async ({ db }) => {
+    const [last] = await db.query("serverInformations").order("desc").take(1);
+    return last ?? null;
+  }
+})
+
 export const getInfo = query({
   handler: async ({ db }) => {
     const data = await db.query("serverInformations").collect()
