@@ -10,7 +10,7 @@ import { Inter, Kaushan_Script } from "next/font/google";
 export const metadata: Metadata = {
   title: "Creative Programmers",
   description: "The official Website of the Creative Programmer Group.",
-  icons: [{ rel: "icon", url: "/public/Images/creativeProgrammersLogo.png" }],
+  icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 const Inter_Font = Inter({
