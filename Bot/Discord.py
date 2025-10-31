@@ -33,67 +33,6 @@ async def createNewCountEntry():
     convex = ConvexClient(CONVEX_URL)
     convex.mutation("setData:createEntry", {"count": guild.member_count})
 
-async def job():
-    guild = client.get_guild(1086939783374315530)
-    load_dotenv(".env")
-    CONVEX_URL = os.getenv("CONVEX_URL")
-    data = ConvexClient(CONVEX_URL).query("getData:getInfo")
-
-    member_counts = {}
-    result_count = []
-    labels = []
-    month = ""
-
-    for item in data:
-        timestamp = int(item.get("_creationTime", 0))
-        date = datetime.fromtimestamp(timestamp / 1000)
-        day = int(date.strftime("%d"))
-        month = date.strftime("%B ")
-
-        member_counts[day] = item.get("MemberCount", 0)
-
-    start_date = min(member_counts.keys())
-    end_date = max(member_counts.keys())
-
-    complete_counts = []
-    for day in range(start_date, end_date + 1):
-        if complete_counts:
-            complete_counts.append(member_counts.get(day, complete_counts[-1]))
-        else:
-            complete_counts.append(member_counts.get(day, 0))
-
-        labels.append(month + str(day))
-
-    for day in labels:
-        if len(labels) > 4:
-            result_count.append(day.split(" ")[1])
-
-        else:
-            result_count.append(day)
-
-
-    qc = QuickChart()
-    qc.width = 500
-    qc.height = 300
-    qc.device_pixel_ratio = 8
-    qc.config = {
-        "type": "line",
-        "data": {
-            "labels": result_count,
-            "datasets": [{
-                "label": "Member Count",
-                "data": complete_counts,
-                "fill": "false"
-            }]
-        }
-    }
-    current_url = qc.get_url()
-
-    channel = client.get_channel(1354542371655782604)
-    await channel.send(current_url)
-
-def sync_job():
-     asyncio.create_task(job())
 
 @client.event
 async def on_ready():
@@ -101,10 +40,6 @@ async def on_ready():
     member = client.get_user(726409024894926869)
     await member.send("Hallo Fabius Schurig, ich wurde gerade neugestartet! " +  datetime.now().strftime('**(%H:%M:%S, %d.%m.%Y)**'))
     await client.change_presence(activity=discord.Activity(type=ActivityType.listening, name="Creative Programmers"))
-    schedule.every(30).days.do(sync_job)
-    while True:
-        schedule.run_pending()
-        await asyncio.sleep(60)
 
 
 @client.event
